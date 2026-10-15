@@ -61,8 +61,20 @@ def home():
 def health():
     return jsonify(status="ok", container=socket.gethostname(), visits=visits)
 
+@app.route("/info")
+def info():
+    return jsonify(
+        app="Docker demo",
+        hostname=socket.gethostname(),
+        python_version=sys.version.split()[0],
+        greeting=os.environ.get("GREETING", "Hello from Docker"),
+        started_at=started,
+        visits=visits,
+    )
+
 
 if __name__ == "__main__":
     # 0.0.0.0 matters: inside a container, 127.0.0.1 is only reachable
     # from within the container itself, so -p would appear to do nothing.
     app.run(host="0.0.0.0", port=8080)
+
